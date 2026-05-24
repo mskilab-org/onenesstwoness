@@ -295,10 +295,16 @@ predict_B1_2 <- function(complex,
                 save = save,
                 outdir = outdir)
     }
-
     hrd <- res$data_matrix
     if (!identical(typeof(hrd), "double")) hrd <- data.matrix(hrd)
     hrd <- as.data.table(hrd)
+    nc = integer(0)
+    if (NROW(dim(hrd)) > 1 && NCOL(hrd) > 1) nc = NCOL(hrd)
+    for (j in seq_len(nc)) {
+      val = unlist(base::subset(hrd, select = j))
+      if (all( ! ( is.na(val) || is.nan(val) ) )) next
+      hrd[,j] = 0.0
+    }
     hrd <- setcols(hrd, c("SV3", "SV5"), c("RS3", "RS5"))
     expl_variables <- expl_variables %>% mutate(hrd)
     ######################################################################
