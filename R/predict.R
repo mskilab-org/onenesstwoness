@@ -254,7 +254,9 @@ predict_B1_2 <- function(complex,
         dels <- merge.repl(
             dels,
             jhom_stats[, .(
-                hlen = max(max(ifelse(na2false(.SD$r > 0.9), .SD$minpx, 0L)), 0L)
+              hlen = as.numeric(
+                max(max(ifelse(na2false(r > 0.9), minpx, 0L)), 0L)
+              )
             ), by = edge.id],
             by = "edge.id"
         )
